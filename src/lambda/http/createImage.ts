@@ -70,6 +70,7 @@ async function createImage(groupId: string, imageId: string, event: APIGatewayPr
     timestamp,
     imageId,
     ...newImage,
+    imageUrl: `https://${bucketName}.s3.amazon.com/${imageId}`
   }
 
   console.log('Storing new item: ', newItem)
@@ -80,5 +81,14 @@ async function createImage(groupId: string, imageId: string, event: APIGatewayPr
   }).promise()
 
   return newItem
+}
+
+function getUploadUrl(imageId: string){
+  return s3.getSignedUrl('putObject',
+  {
+    Bucket: bucketName,
+    key:imageId,
+    Expires: urlExpiration
+  })
 }
 
