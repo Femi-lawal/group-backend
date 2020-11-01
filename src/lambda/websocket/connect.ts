@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler, APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import 'source-map-support/register'
-import * as AWS from 'aws-sdk'
+import * as AWS  from 'aws-sdk'
 
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -10,12 +10,14 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
   console.log('Websocket connect', event)
 
   const connectionId = event.requestContext.connectionId
-  const timestamp = new Date().toISOString
+  const timestamp = new Date().toISOString()
 
   const item = {
     id: connectionId,
     timestamp
   }
+
+  console.log('Storing item: ', item)
 
   await docClient.put({
     TableName: connectionsTable,
@@ -26,4 +28,4 @@ export const handler: APIGatewayProxyHandler = async (event: APIGatewayProxyEven
     statusCode: 200,
     body: ''
   }
-} 
+}
